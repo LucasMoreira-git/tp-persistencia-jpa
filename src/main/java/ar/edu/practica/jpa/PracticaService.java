@@ -3,6 +3,8 @@ package ar.edu.practica.jpa;
 import java.time.LocalDate;
 import java.util.List;
 
+import ar.edu.practica.jpa.dto.DtoMapper;
+import ar.edu.practica.jpa.dto.UsuarioDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
@@ -19,8 +21,24 @@ public class PracticaService {
             List<Producto> productos = crearProductos(categorias);
             productos.forEach(entityManager::persist);
 
-            Usuario usuarioAdmin = new Usuario("Ana", "García", "ana@mail.com", "111111111", "secreto", Rol.ADMIN);
-            Usuario usuario = new Usuario("Luis", "Pérez", "luis@mail.com", "222222222", "secreto", Rol.USUARIO);
+            Usuario usuarioAdmin = Usuario.builder()
+                    .nombre("Ana")
+                    .apellido("García")
+                    .mail("ana@mail.com")
+                    .celular("111111111")
+                    .contrasena("secreto")
+                    .rol(Rol.ADMIN)
+                    .build();
+
+            Usuario usuario = Usuario.builder()
+                    .nombre("Luis")
+                    .apellido("Pérez")
+                    .mail("luis@mail.com")
+                    .celular("222222222")
+                    .contrasena("secreto")
+                    .rol(Rol.USUARIO)
+                    .build();
+
             entityManager.persist(usuarioAdmin);
             entityManager.persist(usuario);
 
@@ -37,9 +55,9 @@ public class PracticaService {
 
     private List<Categoria> crearCategorias() {
         return List.of(
-                new Categoria("Bebidas", "Bebidas frías y calientes"),
-                new Categoria("Almacén", "Productos de almacén"),
-                new Categoria("Limpieza", "Artículos de limpieza")
+                Categoria.builder().nombre("Bebidas").descripcion("Bebidas frías y calientes").build(),
+                Categoria.builder().nombre("Almacén").descripcion("Productos de almacén").build(),
+                Categoria.builder().nombre("Limpieza").descripcion("Artículos de limpieza").build()
         );
     }
 
@@ -59,7 +77,15 @@ public class PracticaService {
     }
 
     private Producto producto(String nombre, double precio, Categoria categoria) {
-        return new Producto(nombre, precio, "Producto " + nombre, 20, nombre.toLowerCase() + ".jpg", true, categoria);
+        return Producto.builder()
+                .nombre(nombre)
+                .precio(precio)
+                .descripcion("Producto " + nombre)
+                .stock(20)
+                .imagen(nombre.toLowerCase() + ".jpg")
+                .disponible(true)
+                .categoria(categoria)
+                .build();
     }
 
     private List<Pedido> crearPedidos(Usuario admin, Usuario usuario, List<Producto> productos) {
@@ -78,7 +104,11 @@ public class PracticaService {
     }
 
     private Pedido pedido(Usuario usuario, FormaPago formaPago) {
-        Pedido pedido = new Pedido(LocalDate.now(), Estado.PENDIENTE, formaPago);
+        Pedido pedido = Pedido.builder()
+                .fecha(LocalDate.now())
+                .estado(Estado.PENDIENTE)
+                .formaPago(formaPago)
+                .build();
         usuario.agregarPedido(pedido);
         return pedido;
     }
@@ -93,14 +123,22 @@ public class PracticaService {
         transaction.commit();
     }
 
-    private void buscarUsuarios(EntityManager entityManager, Long id, String mail) {
+    public List<UsuarioDTO> buscarUsuarios(EntityManager entityManager, Long id, String mail) {
         Usuario porId = entityManager.find(Usuario.class, id);
         Usuario porMail = entityManager.createQuery(
                         "select u from Usuario u where u.mail = :mail", Usuario.class)
                 .setParameter("mail", mail)
                 .getSingleResult();
-        System.out.printf("Usuario por id: %s %s%n", porId.getNombre(), porId.getApellido());
-        System.out.printf("Usuario por mail: %s %s%n", porMail.getNombre(), porMail.getApellido());
+
+        UsuarioDTO dtoPorId = DtoMapper.toDTO(porId);
+        UsuarioDTO dtoPorMail = DtoMapper.toDTO(porMail);
+
+        System.out.printf("Usuario por id (DTO seguro): %s %s (Email: %s, Rol: %s)%n",
+                dtoPorId.nombre(), dtoPorId.apellido(), dtoPorId.mail(), dtoPorId.rol());
+        System.out.printf("Usuario por mail (DTO seguro): %s %s (Email: %s, Rol: %s)%n",
+                dtoPorMail.nombre(), dtoPorMail.apellido(), dtoPorMail.mail(), dtoPorMail.rol());
+
+        return List.of(dtoPorId, dtoPorMail);
     }
 
     private void eliminarProducto(EntityManager entityManager, Producto producto) {

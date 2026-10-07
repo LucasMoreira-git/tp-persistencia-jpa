@@ -1,32 +1,19 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+context: |
+  Proyecto: E-Commerce Refactor (Lombok & DTOs) - Programación III.
+  Stack: Java 17, Gradle, Lombok, Jakarta Persistence / Hibernate, MySQL (XAMPP).
+  Negocio: Dominio de Pedidos, Productos, Categorías y Usuarios.
+  Modelo: Clase abstracta Base -> heredan Usuario, Pedido, Categoria, Producto, DetallePedido.
+  Objetivo: Eliminar código repetitivo usando anotaciones Lombok (@SuperBuilder, @Data) y ocultar campos sensibles con Java Records (UsuarioDTO).
+  Entorno: Windows, VS Code con Antigravity CLI / OpenCode.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
-
-# Per-operation guidance (optional)
-# Add advisory guidance for how apply and archive work should be conducted.
-# This is separate from artifact rules above.
-# Example:
-#   operations:
-#     apply:
-#       guidance:
-#         - Keep test summaries concise
-#     archive:
-#       guidance:
-#         - Summarize the archive outcome before finishing
+rules:
+  proposal:
+    - Mantener la propuesta enfocado únicamente en la migración a Gradle y refactorización a Lombok/DTO.
+  tasks:
+    - Dividir en tareas pequeñas por módulo (ej. build.gradle, entidades, DTO, Main).
+    - Modificar archivos existentes agregando anotaciones de Lombok sin borrar métodos de negocio existentes (ej. calcularTotal).
+  design:
+    - Usar @SuperBuilder en la jerarquía de herencia para permitir el uso del patrón Builder en las subclases.
+    - Utilizar Java Record para la definición de UsuarioDTO.
