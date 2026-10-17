@@ -3,13 +3,18 @@ package ar.edu.practica.jpa;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "productos")
 public class Producto extends Base {
@@ -20,17 +25,8 @@ public class Producto extends Base {
     private String imagen;
     private boolean disponible;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne
     private Categoria categoria;
-
-    public Producto(String nombre, Double precio, String descripcion, int stock, String imagen,
-                    boolean disponible, Categoria categoria) {
-        this.nombre = nombre;
-        this.precio = precio;
-        this.descripcion = descripcion;
-        this.stock = stock;
-        this.imagen = imagen;
-        this.disponible = disponible;
-        this.categoria = categoria;
-    }
 }

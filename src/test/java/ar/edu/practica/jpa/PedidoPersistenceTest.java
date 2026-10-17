@@ -27,10 +27,32 @@ class PedidoPersistenceTest {
     @Test
     void persisteProductoYCalculaTotalDelPedido() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Categoria categoria = new Categoria("Bebidas", "Bebidas frías");
-        Producto producto = new Producto("Agua", 500.0, "Agua mineral", 10, "agua.jpg", true, categoria);
-        Pedido pedido = new Pedido();
-        Usuario usuario = new Usuario("Ana", "García", "ana@mail.com", "111111111", "secreto", Rol.ADMIN);
+        Categoria categoria = Categoria.builder()
+                .nombre("Bebidas")
+                .descripcion("Bebidas frías")
+                .build();
+
+        Producto producto = Producto.builder()
+                .nombre("Agua")
+                .precio(500.0)
+                .descripcion("Agua mineral")
+                .stock(10)
+                .imagen("agua.jpg")
+                .disponible(true)
+                .categoria(categoria)
+                .build();
+
+        Pedido pedido = Pedido.builder().build();
+
+        Usuario usuario = Usuario.builder()
+                .nombre("Ana")
+                .apellido("García")
+                .mail("ana@mail.com")
+                .celular("111111111")
+                .contrasena("secreto")
+                .rol(Rol.ADMIN)
+                .build();
+
         usuario.agregarPedido(pedido);
         pedido.addDetallePedido(2, producto);
 
