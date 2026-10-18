@@ -55,6 +55,7 @@ La base se guarda en `data/jpa_db` y se crea o actualiza con `hibernate.hbm2ddl.
 - Transacciones explicitas y cierre de `EntityManager`/`EntityManagerFactory`.
 - Constructor sin argumentos para JPA.
 - Implementacion de Lombok mediante anotaciones como `@Data`, `@Getter`, `@Setter` y `@Builder` para eliminar codigo repetitivo (boilerplate) y mantener las entidades limpias.
+- Soporte de Lombok habilitado en Maven y en el Java Language Server de VS Code mediante `.vscode/settings.json`.
 - Inclusion del patron DTO para desacoplar la capa de persistencia (entidades JPA) de la capa de transferencia de datos, brindando mayor seguridad y control sobre la informacion que se expone fuera de la base de datos.
 - Prueba de integracion que verifica persistencia real contra H2 y calculo del total.
 - Compilacion fijada a Java 17 para que el proyecto sea portable aunque el equipo use un JDK mas nuevo.
