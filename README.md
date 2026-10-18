@@ -25,6 +25,12 @@ src/
       JpaUtil.java           EntityManagerFactory compartido
       PracticaService.java   Caso de uso completo del enunciado
       Main.java              Punto de entrada ejecutable
+      dto/
+        UsuarioDTO.java      DTO seguro para los datos del usuario
+        ProductoDTO.java     DTO para los datos del producto
+        PedidoDTO.java       DTO para los datos del pedido
+        DetallePedidoDTO.java DTO para los detalles del pedido
+        DtoMapper.java       Mapeo entre entidades y DTOs
     resources/META-INF/
       persistence.xml        Unidad miUnidad y conexion H2
   test/java/
@@ -47,7 +53,9 @@ La base se guarda en `data/jpa_db` y se crea o actualiza con `hibernate.hbm2ddl.
 - Relaciones bidireccionales actualizadas mediante metodos de dominio (`agregarPedido`, `addDetallePedido`).
 - Enums persistidos como texto para que los datos sean legibles.
 - Transacciones explicitas y cierre de `EntityManager`/`EntityManagerFactory`.
-- Constructor sin argumentos para JPA y Lombok solo para reducir boilerplate.
+- Constructor sin argumentos para JPA.
+- Implementacion de Lombok mediante anotaciones como `@Data`, `@Getter`, `@Setter` y `@Builder` para eliminar codigo repetitivo (boilerplate) y mantener las entidades limpias.
+- Inclusion del patron DTO para desacoplar la capa de persistencia (entidades JPA) de la capa de transferencia de datos, brindando mayor seguridad y control sobre la informacion que se expone fuera de la base de datos.
 - Prueba de integracion que verifica persistencia real contra H2 y calculo del total.
 - Compilacion fijada a Java 17 para que el proyecto sea portable aunque el equipo use un JDK mas nuevo.
 
